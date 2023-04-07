@@ -30,7 +30,7 @@ make build-infra
   # 検証用BigQueryのテーブル作成
 ```
 
-# 実行
+## 実行
 
 Makefile に定義した変数 FQN で、作成したテーブルを指定
 
@@ -72,4 +72,9 @@ upstream source: fully_qualified_name: "bigquery:bigquery-public-data.new_york_t
  (n=2)
 create_time: 2022-09-14 13:11:54
 update_time: 2022-09-14 13:11:54
+```
+
+## 後始末
+```bash:bash
+make clean-infra
 ```
