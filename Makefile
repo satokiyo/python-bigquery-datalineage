@@ -77,9 +77,13 @@ enable-billing-account: set-project
 test: ## test package ## make test
 	poetry run python -m pytest
 
+.PHONY: test_tox
+test_tox: ## test in multiple python versions ## make test_tox
+	poetry run python -m tox
+
 .PHONY: lint
 lint: ## lint ## make lint
-	@poetry run python -m flake8 ./src/ ./tests/ --exclude __init__.py --ignore E402,E501,W503
+	@poetry run flake8 ./src/ ./tests/ --exclude __init__.py --ignore E402,E501,W503
 
 .PHONY: format
 format: ## format ## make format
