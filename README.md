@@ -1,14 +1,14 @@
 # Python Datalineage
 
-DataCatalog と DataLineage の Python SDK ライブラリ経由で、指定した Bigquery テーブルのリネージをたどり、最終更新時間を表示するスクリプト
+A script that uses the Python SDK libraries for DataCatalog and DataLineage to trace the lineage of a specified Bigquery table and display the last updated time.
 
 ## zenn
 
 https://zenn.dev/satokiyo/articles/20230406-python-datalineage
 
-## 環境準備
+## setup
 
-Makefile 内で定義した変数を適当な値に変更
+Please set value to the following variables defined in the Makefile
 
 ```makefile:Makefile
 PROJECT_ID:=datalineage-demo
@@ -17,37 +17,44 @@ DATASET:=data_lineage_demo
 BILLING_ACCOUNT_ID:=<YOUR ACCOUNT_ID>
 ```
 
-make コマンドで環境を構築
+Set up an environment with make commands
 
 ```bash:bash
 make build-infra
 
-# 以下の処理を実行する
-  # デモ用プロジェクト作成
-  # 請求先アカウントとの紐づけ（リネージグラフを見るために必要）
-  # API有効化
-  # IAMロール付与
-  # 検証用BigQueryのテーブル作成
+# This will execute the following commands.
+	# $(MAKE) create-project
+	# $(MAKE) enable-billing-account
+	# $(MAKE) enable-api
+	# $(MAKE) add-iam-policy
+	# $(MAKE) create-bq-table
 ```
 
-# 実行
+You may also need to execute the following command.
 
-Makefile に定義した変数 FQN で、作成したテーブルを指定
+```bash:bash
+gcloud auth application-default login
+```
+
+# Run
+
+Specify the table_id in the Makefile.
 
 ```makefile:Makefile
-FQN:=bigquery:datalineage-demo.data_lineage_demo.total_green_trips_22_21
+table_id:=$(PROJECT_ID).$(DATASET).total_green_trips_22_21
+FQN=bigquery:$(table_id)
 ```
 
-指定したテーブルの上流/下流のリネージテーブルと、その最終更新タイムスタンプを表示
+Display the upstream/downstream lineage tables and their last update timestamps.
 
 ```bash:bash
 make run
 
-#  実行されるコマンド
+# This will execute the following commands.
 #  poetry run python src/main.py $(PROJECT_NO) $(LOCATION) $(FQN)
 ```
 
-出力は以下のようになる。
+The output will be as follows.
 
 ```bash
 start!!
