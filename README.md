@@ -81,7 +81,7 @@ create_time: 2022-09-14 13:11:54
 update_time: 2022-09-14 13:11:54
 ```
 
-## 後始末
+## clean up
 
 ```bash:bash
 make clean-infra
