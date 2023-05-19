@@ -80,3 +80,9 @@ upstream source: fully_qualified_name: "bigquery:bigquery-public-data.new_york_t
 create_time: 2022-09-14 13:11:54
 update_time: 2022-09-14 13:11:54
 ```
+
+## 後始末
+
+```bash:bash
+make clean-infra
+```
