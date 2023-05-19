@@ -6,63 +6,44 @@ import pytest
 
 # First Party Library
 from src.client_factory import ClientFactory
+from src.lineage_api import LineageAPIWrapper
 
 t_delta = datetime.timedelta(hours=9)
 JST = datetime.timezone(t_delta, "JST")
 
-
-# First Party Library
-from src.lineage_api import (
-    batch_search_link_processes,
-    get_lineage_event,
-    list_lineage_events,
-    list_processes,
-    search_downstream_links,
-    search_upstream_links,
-)
+factory = ClientFactory()
+lineage_api = LineageAPIWrapper(factory)
 
 
+@pytest.mark.test_target
 @pytest.mark.parametrize(
     "project, location",
-    [
-        (
-            "",
-            "",
-        )
-    ],
+    [()],
 )
 def test_list_processes_in_project(project, location):
-    # Create a client
-    client = ClientFactory.get_client("lineage")
-
-    response = list_processes(client, project, location)
+    response = lineage_api.list_processes(project, location)
 
     # Handle the response
     for item in response:
         print(item)
 
 
+@pytest.mark.test_target
 @pytest.mark.parametrize(
     "project, location, fully_qualified_name",
     [
-        (
-            "",
-            "",
-            "",
-        ),
+        (),
     ],
 )
 def test_search_downstream_links_of_specific_resource(
     project, location, fully_qualified_name
 ):
-    # Create a client
-    client = ClientFactory.get_client("lineage")
-
     # search downstream links of fully_qualified_name
-    response = search_downstream_links(client, project, location, fully_qualified_name)
+    response = lineage_api.search_downstream_links(
+        project, location, fully_qualified_name
+    )
     # Handle the response
     for item in response:
-        # print(item)
         print(f"name: {item.name}")
         print(f"source: {item.source}")
         print(f"target: {item.target}")  # downstream resource
@@ -74,24 +55,20 @@ def test_search_downstream_links_of_specific_resource(
         )
 
 
+@pytest.mark.test_target
 @pytest.mark.parametrize(
     "project, location, fully_qualified_name",
     [
-        (
-            "",
-            "",
-            "",
-        ),
+        (),
     ],
 )
 def test_search_upstream_links_of_specific_resource(
     project, location, fully_qualified_name
 ):
-    # Create a client
-    client = ClientFactory.get_client("lineage")
-
     # search upstream links of fully_qualified_name
-    response = search_upstream_links(client, project, location, fully_qualified_name)
+    response = lineage_api.search_upstream_links(
+        project, location, fully_qualified_name
+    )
     # Handle the response
     for item in response:
         # print(item)
@@ -106,19 +83,17 @@ def test_search_upstream_links_of_specific_resource(
         )
 
 
+@pytest.mark.test_target
 @pytest.mark.parametrize(
     "project, location, link_names",
     [
-        ("", "", [""]),
+        (),
     ],
 )
 def test_batch_search_link_processes_assosiated_with_specific_links(
     project, location, link_names
 ):
-    # Create a client
-    client = ClientFactory.get_client("lineage")
-
-    response = batch_search_link_processes(client, project, location, link_names)
+    response = lineage_api.batch_search_link_processes(project, location, link_names)
 
     # Handle the response
     for item in response:
@@ -133,26 +108,19 @@ def test_batch_search_link_processes_assosiated_with_specific_links(
             )
 
 
+@pytest.mark.test_target
 @pytest.mark.parametrize(
     "project, location, process_id, run_id",
     [
-        (
-            "",
-            "",
-            "",
-            "",
-        ),
+        (),
     ],
 )
 def test_list_lineage_events_assosiated_with_specific_run(
     project, location, process_id, run_id
 ):
-    # Create a client
-    client = ClientFactory.get_client("lineage")
-    response = list_lineage_events(client, project, location, process_id, run_id)
+    response = lineage_api.list_lineage_events(project, location, process_id, run_id)
     # Handle the response
     for item in response:
-        # print(item)
         print(f"lineageEvent name: {item.name}")
         for link in item.links:
             print(f"link.source: {link.source}")
@@ -165,24 +133,15 @@ def test_list_lineage_events_assosiated_with_specific_run(
         )
 
 
+@pytest.mark.test_target
 @pytest.mark.parametrize(
     "project, location, process_id, run_id, lineage_event_id",
     [
-        (
-            "",
-            "",
-            "",
-            "",
-            "",
-        ),
+        (),
     ],
 )
 def test_get_lineage_event(project, location, process_id, run_id, lineage_event_id):
-    # Create a client
-    client = ClientFactory.get_client("lineage")
-
-    response = get_lineage_event(
-        client,
+    response = lineage_api.get_lineage_event(
         project,
         location,
         process_id,
@@ -191,7 +150,6 @@ def test_get_lineage_event(project, location, process_id, run_id, lineage_event_
     )
 
     # Handle the response
-    # print(response)
     print(f"lineageEvent name: {response.name}")
     for link in response.links:
         print(f"link.source: {link.source}")

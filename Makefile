@@ -9,7 +9,8 @@ PROJECT_EXIST_COUNT=$(shell gcloud projects list --filter=name:$(PROJECT_ID) --f
 # for make run args.
 PROJECT_NO=$(shell gcloud projects describe $(PROJECT_ID) --format='value(projectNumber)')
 LOCATION:=us
-FQN:=bigquery:datalineage-demo.data_lineage_demo.total_green_trips_22_21
+table_id:=$(PROJECT_ID).$(DATASET).total_green_trips_22_21
+FQN=bigquery:$(table_id)
 
 .DEFAULT_GOAL:=help
 
@@ -83,20 +84,20 @@ test_tox: ## test in multiple python versions ## make test_tox
 
 .PHONY: lint
 lint: ## lint ## make lint
-	@poetry run flake8 ./src/ ./tests/ --exclude __init__.py --ignore E402,E501,W503
+	@poetry run python -m flake8 ./src/ ./tests/ --exclude __init__.py --ignore E402,E501,W503
 
 .PHONY: format
 format: ## format ## make format
-	@poetry run black --diff --color ./src/ ./tests/
-	@poetry run black ./src/ ./tests/
+	@poetry run python -m black --diff --color ./src/ ./tests/
+	@poetry run python -m black ./src/ ./tests/
 
 .PHONY: isort
 isort: ## isort ## make isort
-	@poetry run isort ./src/ ./tests/
+	@poetry run python -m isort ./src/ ./tests/
 
 .PHONY: type_check
 type_check: ## type_check ## make type_check
-	@poetry run mypy ./src/ ./tests/
+	@poetry run python -m mypy ./src/ ./tests/
 
 .PHONY: static_test
 static_test: ## static_test ## make static_test
